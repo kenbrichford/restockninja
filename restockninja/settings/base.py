@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'pages',
     'listings',
 
+    'mptt',
     'django_celery_results',
     'django_celery_beat',
 ]
