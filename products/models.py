@@ -16,7 +16,7 @@ def create_tag(model_type):
 class Base(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=300, editable=False)
-    tag = models.CharField(max_length=6, unique=True)
+    tag = models.CharField(max_length=7, unique=True)
 
     class Meta:
         abstract = True
@@ -29,7 +29,6 @@ class Product(Base):
     manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     featured = models.BooleanField(default=False)
-    image = models.ImageField(upload_to='products', blank=True)
 
     def save(self, *args, **kwargs):
         self.slug = '%s-%s' % (self.manufacturer.slug, slugify(self.name))
@@ -47,7 +46,6 @@ class Category(MPTTModel, Base):
         blank=True,
         related_name='children'
     )
-    image = models.ImageField(upload_to='categories', blank=True)
 
     class Meta:
         verbose_name_plural = 'categories'
