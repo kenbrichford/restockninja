@@ -14,8 +14,8 @@ def create_tag(model_type):
             return tag
 
 class Base(models.Model):
-    name = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=300, editable=False)
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, editable=False)
     tag = models.CharField(max_length=7, unique=True)
 
     class Meta:
