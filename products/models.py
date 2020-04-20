@@ -30,12 +30,18 @@ class Product(Base):
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     featured = models.BooleanField(default=False)
     upc = models.CharField(max_length=12, unique=True)
+    thumbnail = models.URLField()
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         self.tag = create_tag(Product) if not self.tag else self.tag
         
         return super(Product, self).save(*args, **kwargs)
+
+class Image(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    url = models.URLField()
+    primary = models.BinaryField(default=False)
 
 class Category(MPTTModel, Base):
     parent = TreeForeignKey(
