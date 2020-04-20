@@ -24,6 +24,8 @@ INSTALLED_APPS = [
     'users',
     'pages',
     'listings',
+    'products',
+    'search',
 
     'mptt',
     'django_celery_results',
@@ -56,6 +58,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # 'search.context_processors.include_search_form',
             ],
         },
     },
