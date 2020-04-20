@@ -41,7 +41,7 @@ class Product(Base):
 class Image(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     url = models.URLField()
-    primary = models.BinaryField(default=False)
+    primary = models.BooleanField(default=False)
 
 class Category(MPTTModel, Base):
     parent = TreeForeignKey(
