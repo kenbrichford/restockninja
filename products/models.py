@@ -29,6 +29,7 @@ class Product(Base):
     manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     featured = models.BooleanField(default=False)
+    upc = models.CharField(max_length=12, unique=True)
 
     def save(self, *args, **kwargs):
         self.slug = '%s-%s' % (self.manufacturer.slug, slugify(self.name))
