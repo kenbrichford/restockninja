@@ -75,4 +75,4 @@ class Brand(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
 
-        return super(Category, self).save(*args, **kwargs)
+        return super(Brand, self).save(*args, **kwargs)
