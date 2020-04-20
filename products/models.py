@@ -32,7 +32,7 @@ class Product(Base):
     upc = models.CharField(max_length=12, unique=True)
 
     def save(self, *args, **kwargs):
-        self.slug = '%s-%s' % (self.manufacturer.slug, slugify(self.name))
+        self.slug = '%s-%s' % (self.brand.slug, slugify(self.name))
 
         if not self.tag:
             self.tag = create_tag(Product)
