@@ -1,3 +1,34 @@
 from django.db import models
+from datetime import datetime
+from products.models import Product
 
-# Create your models here.
+class Listing(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    vendor = models.ForeignKey('Vendor', on_delete=models.CASCADE)
+    sku = models.CharField(max_length=20)
+    updated_time = models.DateTimeField(auto_now=True)
+    url = models.URLField(max_length=300, blank=True)
+
+    class Meta:
+        unique_together = ['sku', 'vendor']
+
+    def __str__(self):
+        return '%s: %s' % (self.vendor, self.sku)
+
+class Vendor(models.Model):
+    name = models.CharField(max_length=20)
+    image = models.ImageField(upload_to='vendors', blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Price(models.Model):
+    listing = models.ForeignKey('Listing', on_delete=models.CASCADE)
+    price = models.PositiveIntegerField(null=True)
+    shipping = models.PositiveIntegerField(null=True)
+    availability = models.BooleanField()
+    created_time = models.DateTimeField(auto_now_add=True)
+    updated_time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return '%s: %s' % (self.listing, self.created_time)
