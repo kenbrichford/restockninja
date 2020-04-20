@@ -1,6 +1,6 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
-from .models import Product, Category, Manufacturer
+from .models import Product, Category, Brand
 from .forms import ProductForm
 from listings.models import Listing
 
@@ -26,4 +26,4 @@ class CategoryAdmin(MPTTModelAdmin):
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(Manufacturer)
+admin.site.register(Brand)

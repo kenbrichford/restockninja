@@ -26,7 +26,7 @@ class Base(models.Model):
 
 
 class Product(Base):
-    manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE)
+    brand = models.ForeignKey('Brand', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     featured = models.BooleanField(default=False)
     upc = models.CharField(max_length=12, unique=True)
@@ -65,7 +65,7 @@ class Category(MPTTModel, Base):
 
         return super(Category, self).save(*args, **kwargs)
 
-class Manufacturer(models.Model):
+class Brand(models.Model):
     name = models.CharField(max_length=20)
     slug = models.SlugField(max_length=20)
 
