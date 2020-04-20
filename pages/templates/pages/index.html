@@ -9,5 +9,8 @@
 {% endblock %}
 
 {% block content %}
-
+<form action="{% url 'search' %}" method="get">
+    <input type="search" name="query" minlength=3 required placeholder="Initiate search sequence...">
+    <input type="submit" value="Go">
+</form>
 {% endblock %}
