@@ -32,10 +32,8 @@ class Product(Base):
     upc = models.CharField(max_length=12, unique=True)
 
     def save(self, *args, **kwargs):
-        self.slug = '%s-%s' % (self.brand.slug, slugify(self.name))
-
-        if not self.tag:
-            self.tag = create_tag(Product)
+        self.slug = slugify(self.name)
+        self.tag = create_tag(Product) if not self.tag else self.tag
         
         return super(Product, self).save(*args, **kwargs)
 
@@ -55,13 +53,8 @@ class Category(MPTTModel, Base):
         order_insertion_by = ['name']
 
     def save(self, *args, **kwargs):
-        if self.parent:
-            self.slug = '%s-%s' % (self.parent.slug, slugify(self.name))
-        else:
-            self.slug = slugify(self.name)
-
-        if not self.tag:
-            self.tag = create_tag(Category)
+        self.slug = slugify(self.name)
+        self.tag = create_tag(Category) if not self.tag else self.tag
 
         return super(Category, self).save(*args, **kwargs)
 
