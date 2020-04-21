@@ -31,6 +31,7 @@ class Product(Base):
     featured = models.BooleanField(default=False)
     upc = models.CharField(max_length=12, unique=True)
     thumbnail = models.URLField()
+    variants = models.ManyToManyField('Product')
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
