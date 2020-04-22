@@ -19,19 +19,14 @@ class Scraper:
         elif self.vendor_name == 'Target':
             self.store = import_stores.Target()
 
-    def parse_store_data(self, input_type, input_string):
+    def parse_store_data(self, scrape_type, scrape_string):
         self.create_store()
         
-        if input_type == 'url':
-            sku = get_sku(self.store.sku_pattern, input_string)
-
-            # if Listing.objects.filter(vendor__name=self.vendor_name, sku=sku).exists():
-            #     return
-
-            url = self.store.create_url(skus=sku)
+        if scrape_type == 'url':        
+            url = self.store.create_url(skus=scrape_string)
         
-        elif input_type == 'upc':
-            url = self.store.create_url(upc=input_string)
+        elif scrape_type == 'upc':
+            url = self.store.create_url(upc=scrape_string)
             
         response = requests.get(url.endpoint, params=url.params)
         
@@ -93,18 +88,18 @@ class Scraper:
             threading.Thread(target=self.product.variants.add, args=(variant,)).start()
         self.product.save()
     
-    def scrape(self, input_type, input_string, q=None):
-        items = self.parse_store_data(input_type, input_string)
+    def scrape(self, scrape_type, scrape_string, q=None):
+        items = self.parse_store_data(scrape_type, scrape_string)
 
         if items:
             item = items[0]
 
             self.create_data_dict(item)
 
-            if input_type == 'upc':
+            if scrape_type == 'upc':
                 q.put(self.data)
             
-            elif input_type == 'url':
+            elif scrape_type == 'url':
                 self.scrape_by_url()
 
 def create_product(product_data):
@@ -179,32 +174,4 @@ def upload_listing(product, vendor_name, parsed_data):
         defaults = {'url': listing_data.url}
     )
 
-    upload_price(listing, parsed_data.get('price'))
-
-def get_sku(pattern, url):
-    try:
-        sku = re.search(pattern, url).group(0)
-    except AttributeError:
-        sku = None
-    
-    return sku
-
-def get_vendor_name(url):
-    vendor_names = Vendor.objects.values_list('name', flat=True)
-
-    name_list = [i for i in vendor_names if i.lower().replace(' ', '') == url.netloc.split('.')[-2]]
-
-    vendor_name = name_list[0] if len(name_list) > 0 else None
-
-    return vendor_name            
-
-def scrape_search(url):
-    vendor_name = get_vendor_name(url)
-
-    if vendor_name:
-        scraper = Scraper(vendor_name)
-        scraper.scrape('url', url.path)
-        return scraper.product
-    
-    else:
-        return None
+    upload_price(listing, parsed_data.get('price'))        
