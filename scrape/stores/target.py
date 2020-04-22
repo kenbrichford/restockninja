@@ -1,39 +1,71 @@
 import os
-from scrape.data_structures import Link, Price
+from scrape.data_structures import Link, Price, Listing, Product
 
 class Target:
-    items_per_request = 1
+    items_per_request = 100
     free_shipping_minimum = 3500
     sku_pattern = r'(?<=(\/A-))\d{8}$'
 
-    def create_url(self, listings):
-        excluded_fields = [
-            'esp',
-            'taxonomy',
-            'promotion',
-            'bulk_ship',
-            'rating_and_review_reviews',
-            'rating_and_review_statistics',
-            'question_answer_statistics'
-        ]
+    def create_url(self, **kwargs):
+        skus = kwargs.get('skus', None)
+        upc = kwargs.get('upc', None)
 
         params = {
-            'excludes': ','.join(excluded_fields),
+            'excludes': 'esp',
+            'key': os.getenv('TARGET_API_KEY'),
         }
 
-        endpoint = 'https://redsky.target.com/v2/pdp/tcin/%s' % listings[0].sku
+        if skus:
+            endpoint = 'https://redsky.target.com/v1/plp/collection/%s' % skus
+        elif upc:
+            endpoint = 'https://redsky.target.com/v1/plp/search'
+            params['keyword'] = upc
 
         return Link(endpoint, params)
 
     def get_items(self, data):
-        return [data.get('product')] if data.get('product').get('item') else []
+        if data.get('search_response', {}).get('items', {}).get('Item'):
+            return data.get('search_response', {}).get('items', {}).get('Item')
+        else:
+            return []
+    
+    def parse_product_data(self, item):
+        name = item.get('title')
+        brand = item.get('brand')
+        category = [item.get('merch_class').title()]
+        upc = item.get('upc')
+        if item.get('images'):
+            thumbnail = item.get('images')[0].get('base_url')
+            thumbnail += item.get('images')[0].get('primary')
+        variants = []
 
-    def parse_data(self, item):
-        sku = item.get('item').get('tcin')
-        url = item.get('item').get('buy_url')
+        return Product(name, brand, category, upc, thumbnail, variants)
+    
+    def parse_image_data(self, item):
+        images = []
 
-        if item.get('available_to_promise_network').get('availability') == 'AVAILABLE':
-            price = item.get('price').get('offerPrice').get('price') * 100
+        if item.get('images'):
+            base_url = item.get('images')[0].get('base_url')
+            primary = base_url + item.get('images')[0].get('primary')
+
+            images.append(primary)
+
+            if item.get('images')[0].get('alternate_urls'):
+                alternates = [base_url + a for a in item.get('images')[0].get('alternate_urls')]
+
+                images.extend(alternates)
+
+        return images
+    
+    def parse_listing_data(self, item):
+        sku = item.get('tcin')
+        url = 'https://www.target.com%s' % item.get('url')
+
+        return Listing(sku, url)
+
+    def parse_price_data(self, item):
+        if item.get('availability_status') == 'IN_STOCK':
+            price = item.get('offer_price').get('price') * 100
             shipping = 0 if price > self.free_shipping_minimum else None
             availability = True
         
@@ -42,4 +74,4 @@ class Target:
             shipping = None
             availability = False        
 
-        return Price(sku, url, price, shipping, availability)
+        return Price(price, shipping, availability)
