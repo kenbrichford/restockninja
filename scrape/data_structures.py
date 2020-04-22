@@ -2,16 +2,23 @@ class Link:
     def __init__(self, endpoint, params):
         self.endpoint = endpoint
         self.params = params
-    
-class Sku:
-    def __init__(self, vendor_name, sku):
-        self.vendor_name = vendor_name
-        self.sku = sku
 
 class Price:
-    def __init__(self, sku, url, price, shipping, availability):
-        self.sku = sku
-        self.url = url
+    def __init__(self, price, shipping, availability):
         self.price = price
         self.shipping = shipping
         self.availability = availability
+
+class Listing:
+    def __init__(self, sku, url):
+        self.sku = sku
+        self.url = url
+
+class Product:
+    def __init__(self, name, brand, category, upc, thumbnail, variants):
+        self.name = name
+        self.brand = brand
+        self.category = category
+        self.upc = upc
+        self.thumbnail = thumbnail
+        self.variants = variants
