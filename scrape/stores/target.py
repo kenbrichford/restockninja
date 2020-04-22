@@ -4,7 +4,6 @@ from scrape.data_structures import Link, Price, Listing, Product
 class Target:
     items_per_request = 100
     free_shipping_minimum = 3500
-    sku_pattern = r'(?<=(\/A-))\d{8}$'
 
     def create_url(self, **kwargs):
         skus = kwargs.get('skus', None)

@@ -4,7 +4,6 @@ from scrape.data_structures import Link, Price, Listing, Product
 class Walmart:
     items_per_request = 20
     call_limit = 5000
-    sku_pattern = r'(?<=\/)\d{9}$'
 
     def create_url(self, **kwargs):
         skus = kwargs.get('skus', None)

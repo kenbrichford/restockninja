@@ -4,7 +4,6 @@ from scrape.data_structures import Link, Price, Listing, Product
 class BestBuy:
     items_per_request = 100
     call_limit = 50000
-    sku_pattern = r'(?<=\/)\d{7}(?=(\.p)$)'
 
     def create_url(self, **kwargs):
         skus = kwargs.get('skus', None)
