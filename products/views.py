@@ -3,3 +3,4 @@ from .models import Product
 
 class ProductDetailView(DetailView):
     model = Product
+    context_object_name = 'product'
