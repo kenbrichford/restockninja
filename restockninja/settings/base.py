@@ -131,3 +131,7 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_REDIS_MAX_CONNECTIONS = 20
 
 CELERY_REDIS_CONNECT_TIMEOUT = 10
+
+
+# Remove appended slashes
+APPEND_SLASH = False
