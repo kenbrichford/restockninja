@@ -17,7 +17,7 @@ class CategoryInline(admin.TabularInline):
 
 class ProductAdmin(admin.ModelAdmin):
     form = ProductForm
-    readonly_fields = ('tag',)
+    readonly_fields = ('tag', 'upc')
     inlines = [ListingInline]
 
 class CategoryAdmin(MPTTModelAdmin):
