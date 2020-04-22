@@ -1,3 +1,27 @@
 {% block content %}
-    {{ product.name }}
+<table>
+    <tr>
+        <td>Name</td>
+        <td>{{ product.name }}</td>
+    </tr>
+    <tr>
+        <td>Brand</td>
+        <td>{{ product.brand }}</td>
+    </tr>
+    <tr>
+        <td>Category</td>
+        <td>{{ product.category }}</td>
+    </tr>
+    <tr>
+        <td>Variants</td>
+        <td>
+            {% for variant in product.variants.all %}
+            <a href="{% url 'product-detail' variant.slug variant.tag %}">
+                <img src="{{ variant.thumbnail }}">
+                {{ variant.name }}
+            </a>
+            {% endfor %}
+        </td>
+    </tr>
+</table>
 {% endblock %}
