@@ -33,6 +33,9 @@ class Product(Base):
     thumbnail = models.URLField()
     variants = models.ManyToManyField('self')
 
+    def get_absolute_url(self):
+        return '/product/%s/%s' % (self.slug, self.tag)
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         self.tag = create_tag(Product) if not self.tag else self.tag
