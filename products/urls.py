@@ -1,9 +1,6 @@
-from django.urls import path, register_converter
+from django.urls import re_path, register_converter
 from .views import ProductDetailView
-from .converters import TagConvertor
-
-register_converter(TagConvertor, 'tag')
 
 urlpatterns = [
-    path('<slug:slug>/<tag:tag>/', ProductDetailView.as_view(), name='product')
+    re_path(r'^([\w-]+)/(?P<slug>[A-Z0-9]{7})$', ProductDetailView.as_view(), name='product-detail')
 ]
