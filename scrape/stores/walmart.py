@@ -24,7 +24,10 @@ class Walmart:
         return Link(endpoint, params)
     
     def get_items(self, data):
-        return data.get('items')
+        if data.get('items'):
+            return data.get('items')
+        else:
+            return []
     
     def parse_product_data(self, item):
         name = item.get('name')
@@ -39,13 +42,13 @@ class Walmart:
     def parse_image_data(self, item):
         images = []
 
-        primary = next((i for i in item.get('imageEntities') if i.get('entityType') == 'PRIMARY'), None)
+        for image in item.get('imageEntities'):
+            if image.get('entityType') == 'PRIMARY':
+                primary = True
+            else:
+                primary = False
 
-        if primary:
-            images.append(primary.get('largeImage'))
-
-        for image in [i for i in item.get('imageEntities') if i != primary]:
-            images.append(image.get('largeImage'))
+            images.append({'url': image.get('largeImage'), 'primary': primary})
 
         return images
     

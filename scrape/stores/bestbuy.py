@@ -19,8 +19,8 @@ class BestBuy:
             'apiKey': os.getenv('BESTBUY_API_KEY'),
             'show': ','.join(shown_attributes),
             'format': 'json',
-            'pageSize': '100',
-        } 
+            'pageSize': 100,
+        }
 
         endpoint = 'https://api.bestbuy.com/v1/products'
 
@@ -32,7 +32,10 @@ class BestBuy:
         return Link(endpoint, params)
 
     def get_items(self, data):
-        return data.get('products')
+        if data.get('products'):
+            return data.get('products')
+        else:
+            return []
 
     def parse_product_data(self, item):
         name = item.get('name')
@@ -47,13 +50,12 @@ class BestBuy:
     def parse_image_data(self, item):
         images = []
 
-        primary = next((i for i in item.get('images') if i.get('primary')), None)
-
-        if primary:
-            images.append(primary.get('href'))
-
-        for image in [i for i in item.get('images') if i != primary]:
-            images.append(image.get('href'))
+        for image in item.get('images'):
+            if int(image.get('width')) > 500 or int(image.get('height')) > 500:
+                images.append({
+                    'url': image.get('href'),
+                    'primary': image.get('primary')
+                })
 
         return images
     
