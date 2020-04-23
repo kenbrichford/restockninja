@@ -62,45 +62,51 @@ class Scraper:
 
         upc = self.data.get(self.vendor_name).get('product').upc
 
-        q = Queue()
-        for vendor in other_vendors:
-            scraper = Scraper(vendor.name)
-            Process(target=scraper.scrape, args=('upc', upc, q)).start()
-            self.data.update(q.get())
+        if upc:
+            q = Queue()
+            for vendor in other_vendors:
+                scraper = Scraper(vendor.name)
+                Process(target=scraper.scrape, args=('upc', upc, q)).start()
+                self.data.update(q.get())
     
     def scrape_by_url(self):
         self.scrape_other_vendors()
 
+        self.data = {key: val for key, val in self.data.items() if val}
+
         product_data = self.create_product_data()
 
-        image_data = max((val['image'] for key, val in self.data.items()), key=len)
+        image_data = max((val.get('image') for key, val in self.data.items()), key=len)
 
         self.product = create_product(product_data)
         
-        for index, url in enumerate(image_data):
-            threading.Thread(target=upload_image, args=(self.product, index, url)).start()
+        if image_data:
+            for image in image_data:
+                threading.Thread(target=upload_image, args=(self.product, image)).start()
         
         for vendor_name, parsed_data in self.data.items():
             threading.Thread(target=upload_listing, args=(self.product, vendor_name, parsed_data)).start()
 
-        variants = get_variants(product_data, self.product)
-        for variant in variants:
-            threading.Thread(target=self.product.variants.add, args=(variant,)).start()
-        self.product.save()
+        if product_data.variants.get('skus'):
+            variants = get_variants(product_data, self.product)
+            for variant in variants:
+                threading.Thread(target=self.product.variants.add, args=(variant,)).start()
+            self.product.save()
     
     def scrape(self, scrape_type, scrape_string, q=None):
         items = self.parse_store_data(scrape_type, scrape_string)
 
         if items:
-            item = items[0]
+            for item in items:
+                self.create_data_dict(item)
 
-            self.create_data_dict(item)
-
-            if scrape_type == 'upc':
-                q.put(self.data)
-            
-            elif scrape_type == 'url':
-                self.scrape_by_url()
+                if q:
+                    q.put(self.data)
+                
+                if scrape_type == 'url':
+                    self.scrape_by_url()
+        elif q:
+            q.put({self.vendor_name: None})
 
 def create_product(product_data):
     brand, brand_created = Brand.objects.get_or_create(
@@ -157,9 +163,8 @@ def upload_price(listing, parsed_data):
 
     # listing.save()
 
-def upload_image(product, index, url):
-    primary = True if index == 0 else False
-    image = Image(product=product, url=url, primary=primary)
+def upload_image(product, image):
+    image = Image(product=product, url=image.get('url'), primary=image.get('primary'))
     image.save()
 
 def upload_listing(product, vendor_name, parsed_data):
