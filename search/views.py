@@ -1,6 +1,7 @@
 import re
 from datetime import timedelta
 from urllib.parse import unquote, urlparse
+from django.contrib import messages
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.core.validators import URLValidator
@@ -38,31 +39,34 @@ def search(request):
 
             domain = url.netloc.split('.')[-2]
 
-            store = next(store for store in stores if store.get('domain') == domain)
+            store = next((store for store in stores if store.get('domain') == domain), None)
 
-            vendor_name = store.get('name')
-        
-            sku = get_sku(store.get('pattern'), url.path)
+            if store:
+                vendor_name = store.get('name')
+            
+                sku = get_sku(store.get('pattern'), url.path)
 
-            if vendor_name:
-                one_hour_ago = timezone.now() - timedelta(minutes=1)
+                if vendor_name and sku:
+                    one_hour_ago = timezone.now() - timedelta(minutes=1)
 
-                listing = Listing.objects.filter(
-                    updated_time__lte=one_hour_ago,
-                    vendor__name=vendor_name,
-                    sku=sku
-                )
+                    listing = Listing.objects.filter(
+                        updated_time__gte=one_hour_ago,
+                        vendor__name=vendor_name,
+                        sku=sku
+                    )
 
-                if listing.exists():
-                    return redirect(listing.first().product)
+                    if listing.exists():
+                        return redirect(listing.first().product)
 
-                scraper = Scraper(vendor_name)
-                scraper.scrape('url', sku)
-                return redirect(scraper.product)
-
-            return render(request,'search/search.html',{})
+                    scraper = Scraper(vendor_name)
+                    scraper.scrape('url', sku)
+                    return redirect(scraper.product)
         
         except ValidationError:
             pass
+
+        messages.error(request, 'Sorry, couldn\'t find a matching product from your link. Please try again.')
+
+        return redirect('/')
         
     
