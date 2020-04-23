@@ -33,7 +33,9 @@
             {% for price in prices %}
             <tr>
                 <td>{{ price.listing.vendor.name }}</td>
-                <td>{{ price.available }}</td>
+                <td>
+                    {% if price.available %}In stock{% else %}Out of stock{% endif %} as of {{ price.updated_time }}
+                </td>
                 <td><a href="{{ price.listing.url }}">View item</a></td>
             </tr>
             {% endfor %}
