@@ -47,12 +47,11 @@ class Target:
             base_url = item.get('images')[0].get('base_url')
             primary = base_url + item.get('images')[0].get('primary')
 
-            images.append(primary)
-
+            images.append({'url': primary, 'primary': True})
+            
             if item.get('images')[0].get('alternate_urls'):
-                alternates = [base_url + a for a in item.get('images')[0].get('alternate_urls')]
-
-                images.extend(alternates)
+                for image in item.get('images')[0].get('alternate_urls'):
+                    images.append({'url': base_url + image, 'primary': False})
 
         return images
     
