@@ -33,7 +33,7 @@
             {% for price in prices %}
             <tr>
                 <td>{{ price.listing.vendor.name }}</td>
-                <td>{{ price.availability }}</td>
+                <td>{{ price.available }}</td>
                 <td><a href="{{ price.listing.url }}">View item</a></td>
             </tr>
             {% endfor %}

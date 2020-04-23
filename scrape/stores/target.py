@@ -65,11 +65,11 @@ class Target:
         if item.get('availability_status') == 'IN_STOCK':
             price = item.get('offer_price').get('price') * 100
             shipping = 0 if price > self.free_shipping_minimum else None
-            availability = True
+            available = True
         
         else:
             price = None
             shipping = None
-            availability = False        
+            available = False
 
-        return Price(price, shipping, availability)
+        return Price(price, shipping, available)

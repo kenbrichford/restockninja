@@ -4,10 +4,10 @@ class Link:
         self.params = params
 
 class Price:
-    def __init__(self, price, shipping, availability):
+    def __init__(self, price, shipping, available):
         self.price = price
         self.shipping = shipping
-        self.availability = availability
+        self.available = available
 
 class Listing:
     def __init__(self, sku, url):

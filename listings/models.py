@@ -26,7 +26,7 @@ class Price(models.Model):
     listing = models.ForeignKey('Listing', on_delete=models.CASCADE)
     price = models.PositiveIntegerField(null=True)
     shipping = models.PositiveIntegerField(null=True)
-    availability = models.BooleanField()
+    available = models.BooleanField()
     created_time = models.DateTimeField(auto_now_add=True)
     updated_time = models.DateTimeField(auto_now=True)
 

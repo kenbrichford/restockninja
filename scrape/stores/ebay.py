@@ -52,8 +52,8 @@ class Ebay:
             price = None
             shipping = None
         
-        availability = item.get('onlineAvailability')
+        available = item.get('onlineAvailability')
         
 
-        return Price(sku, self.url, price, shipping, availability)
+        return Price(sku, self.url, price, shipping, available)
     

@@ -59,12 +59,12 @@ class Walmart:
         if item.get('availableOnline') and not item.get('marketplace'):
             price = item.get('salePrice') * 100
             shipping = item.get('standardShipRate') * 100
-            availability = item.get('availableOnline')
+            available = item.get('availableOnline')
         
         else:
             price = None
             shipping = None
-            availability = False 
+            available = False 
         
-        return Price(price, shipping, availability)
+        return Price(price, shipping, available)
 

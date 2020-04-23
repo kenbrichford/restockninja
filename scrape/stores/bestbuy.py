@@ -71,6 +71,6 @@ class BestBuy:
             price = None
             shipping = None
         
-        availability = item.get('onlineAvailability')
+        available = item.get('onlineAvailability')
 
-        return Price(price, shipping, availability)
+        return Price(price, shipping, available)
