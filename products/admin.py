@@ -21,7 +21,7 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [ListingInline]
 
 class CategoryAdmin(MPTTModelAdmin):
-    readonly_fields = ('parent', 'tag')
+    readonly_fields = ('tag',)
     inlines = [CategoryInline]
 
 admin.site.register(Product, ProductAdmin)
