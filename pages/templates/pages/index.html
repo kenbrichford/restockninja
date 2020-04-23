@@ -9,6 +9,16 @@
 {% endblock %}
 
 {% block content %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+        {{ message }}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <form action="{% url 'search' %}" method="get">
     <input type="search" name="query" minlength=3 required placeholder="Initiate search sequence...">
     <input type="submit" value="Go">
