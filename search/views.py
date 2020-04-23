@@ -1,14 +1,9 @@
 import re
-from datetime import timedelta
 from urllib.parse import unquote, urlparse
 from django.contrib import messages
-from django.utils import timezone
-from django.shortcuts import render, redirect
-from django.core.validators import URLValidator
-from django.core.exceptions import ValidationError
-from products.models import Product
+from django.shortcuts import redirect
 from listings.models import Listing
-from scrape.scraper import Scraper
+from scrape.scrape import Scrape
 
 stores = [
     {'name': 'Walmart', 'domain': 'walmart', 'pattern': r'(?<=\/)\d{9}$'},
@@ -18,55 +13,34 @@ stores = [
 
 def get_sku(pattern, url_path):
     try:
-        sku = re.search(pattern, url_path).group(0)
+        return re.search(pattern, url_path).group(0)
     except AttributeError:
-        sku = None
-    
-    return sku   
+        return None
 
 def search(request):
-    query = request.GET.get('query', None)
+    query = unquote(request.GET.get('query', None))
+    url = urlparse(query)
+    domain = url.netloc.split('.')[-2] if url.netloc else None
+    store = next((store for store in stores if store.get('domain') == domain), None)
 
-    if query:
-        validator = URLValidator()
+    if store:
+        vendor_name = store.get('name')   
+        sku = get_sku(store.get('pattern'), url.path)
 
-        query = unquote(query)
-        
-        try:
-            validator(query)
+        if vendor_name and sku:
+            listing = Listing.objects.filter(
+                vendor__name=vendor_name,
+                sku=sku
+            )
 
-            url = urlparse(query)
+            if listing.exists():
+                return redirect(listing.first().product)
 
-            domain = url.netloc.split('.')[-2]
+            scrape = Scrape(vendor_name)
+            product = scrape.scrape_by_url(sku)
+            return redirect(product)
 
-            store = next((store for store in stores if store.get('domain') == domain), None)
-
-            if store:
-                vendor_name = store.get('name')
-            
-                sku = get_sku(store.get('pattern'), url.path)
-
-                if vendor_name and sku:
-                    one_hour_ago = timezone.now() - timedelta(minutes=1)
-
-                    listing = Listing.objects.filter(
-                        updated_time__gte=one_hour_ago,
-                        vendor__name=vendor_name,
-                        sku=sku
-                    )
-
-                    if listing.exists():
-                        return redirect(listing.first().product)
-
-                    scraper = Scraper(vendor_name)
-                    scraper.scrape('url', sku)
-                    return redirect(scraper.product)
-        
-        except ValidationError:
-            pass
-
-        messages.error(request, 'Sorry, couldn\'t find a matching product from your link. Please try again.')
-
-        return redirect('/')
+    messages.error(request, 'Sorry, couldn\'t find a matching product from your link. Please try again.')
+    return redirect('/')
         
     
