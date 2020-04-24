@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Search: {{ request.GET.query }}{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'search/css/style.css' %}"/>
+{% endblock %}
+
+{% block content %}
+{% if products %}
+{% for product in products %}
+<a href="{% url 'product-detail' product.slug product.tag %}">
+    <img src="{{ product.thumbnail }}">
+    {{ product.name }}
+</a>
+{% endfor %}
+{% else %}
+<p>Sorry, no items matched your search. Please try again or enter a link to add a new item.</p>
+{% endif %}
+{% endblock %}
