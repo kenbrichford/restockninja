@@ -1,3 +1,13 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'products/css/style.css' %}"/>
+{% endblock %}
+
 {% block content %}
 {% for image in images %}
 <img src="{{ image.url }}">
@@ -36,7 +46,7 @@
                 <td>
                     {% if price.available %}In stock{% else %}Out of stock{% endif %} as of {{ price.updated_time }}
                 </td>
-                <td><a href="{{ price.listing.url }}">View item</a></td>
+                <td><a href="{{ price.listing.url }}" target="_blank">View item</a></td>
             </tr>
             {% endfor %}
         </table></td>
