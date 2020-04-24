@@ -23,10 +23,11 @@ class Target:
         return Link(endpoint, params)
 
     def get_items(self, data):
-        if data.get('search_response', {}).get('items', {}).get('Item'):
-            return data.get('search_response', {}).get('items', {}).get('Item')
-        else:
-            return []
+        response = data.get('search_response', {}).get('items', {}).get('Item')
+        if response and not response[0].get('error_message'):
+            return response
+            
+        return []
     
     def parse_product_data(self, item):
         name = item.get('title')
