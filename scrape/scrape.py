@@ -21,7 +21,7 @@ class Scrape:
             return import_stores.Target()
 
     def get_store_items(self, url):
-        response = requests.get(url.endpoint, params=url.params) 
+        response = requests.get(url.endpoint, params=url.params)
         return self.store.get_items(response.json())
     
     def create_data_dict(self, item):
@@ -97,6 +97,8 @@ class Scrape:
                 product.save()
             
             return product
+        
+        return None
     
     def scrape_by_listing(self, listing):
         url = self.store.create_url(skus=listing.sku)
@@ -109,19 +111,22 @@ class Scrape:
         listing.save()
 
 def upload_product(product_data):
-    brand = Brand.objects.get_or_create(name=product_data.brand)
+    brand = Brand.objects.get_or_create(name=product_data.brand)[0]
     
-    parent = None
-    for cat in product_data.category:
-        category = Category.objects.get_or_create(name=cat, parent=parent)
-        parent = category[0]
+    if product_data.category:
+        parent = None
+        for cat in product_data.category:
+            category = Category.objects.get_or_create(name=cat, parent=parent)[0]
+            parent = category
+    else:
+        category = None
 
     return Product.objects.get_or_create(
         upc=product_data.upc,
         name=product_data.name,
         defaults={
-            'brand': brand[0],
-            'category': category[0],
+            'brand': brand,
+            'category': category,
             'thumbnail': product_data.thumbnail
         }
     )
