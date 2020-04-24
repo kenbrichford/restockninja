@@ -27,9 +27,9 @@ class Base(models.Model):
 
 class Product(Base):
     brand = models.ForeignKey('Brand', on_delete=models.CASCADE)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, null=True)
     featured = models.BooleanField(default=False)
-    upc = models.CharField(max_length=12, blank=True, null=True)
+    upc = models.CharField(max_length=13, blank=True, null=True)
     thumbnail = models.URLField()
     variants = models.ManyToManyField('self')
 
