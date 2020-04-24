@@ -32,7 +32,10 @@ class Walmart:
     def parse_product_data(self, item):
         name = item.get('name')
         brand = item.get('brandName')
-        category = item.get('categoryPath').split('/')[1:]
+        if item.get('categoryPath') == 'UNNAV':
+            category = []
+        else:
+            category = item.get('categoryPath').split('/')[1:]
         upc = item.get('upc')
         thumbnail = item.get('thumbnailImage')
         variants = item.get('variants')
