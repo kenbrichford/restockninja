@@ -9,7 +9,7 @@ from listings.models import Listing
 from scrape.scrape import Scrape
 
 stores = [
-    {'name': 'Walmart', 'domain': 'walmart', 'pattern': r'(?<=\/)\d{9}$'},
+    {'name': 'Walmart', 'domain': 'walmart', 'pattern': r'(?<=\/)\d{8,9}$'},
     {'name': 'Best Buy', 'domain': 'bestbuy', 'pattern': r'(?<=\/)\d{7}(?=(\.p)$)'},
     {'name': 'Target', 'domain': 'target', 'pattern': r'(?<=(\/A-))\d{8}$'}
 ]
@@ -51,10 +51,10 @@ def search(request):
                 if product:
                     return redirect(product)
         
-        messages.error(request, 'Sorry, couldn\'t find a matching product from your link. Please try again.')
+        messages.error(request, 'Sorry, we couldn\'t find a matching product from your link. Please try again.')
         return redirect('/')
     
     else:
-        products = Product.objects.filter(name__search=query)
+        products = Product.objects.filter(name__search=query)[:10]
         return render(request, 'search/search.html', {'products': products})
     

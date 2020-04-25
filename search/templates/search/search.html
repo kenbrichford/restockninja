@@ -10,13 +10,22 @@
 
 {% block content %}
 {% if products %}
-{% for product in products %}
-<a href="{% url 'product-detail' product.slug product.tag %}">
-    <img src="{{ product.thumbnail }}">
-    {{ product.name }}
-</a>
-{% endfor %}
+<div class="cards">
+    {% for product in products %}
+    <div class="content-card">
+        <a href="{% url 'product-detail' product.slug product.tag %}">
+            <div class="thumbnail">
+                <img src="{{ product.thumbnail }}">
+            </div>
+            {{ product.name }}
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
 {% else %}
-<p>Sorry, no items matched your search. Please try again or enter a link to add a new item.</p>
+<div class="content-box">
+    Sorry, no items matched your search. Please try again or enter a link to add a new item.
+</div>
 {% endif %}
 {% endblock %}
