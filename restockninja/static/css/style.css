@@ -95,7 +95,7 @@ a {
 /* Content */
 .content {
     padding: 50px 20px 0 20px;
-    min-height: calc(100vh - 190px);
+    min-height: calc(100vh - 150px);
 }
 
 .container {
@@ -130,6 +130,10 @@ a {
     align-items: center;
     height: 100px;
     margin-bottom: 10px;
+}
+
+.error-home {
+    text-decoration: underline;
 }
 
 /* Footer */
