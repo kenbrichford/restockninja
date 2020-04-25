@@ -26,14 +26,34 @@
 
     <body>
         <div class="navbar">
-            <a href="/">Home</a>
+            <a class="brand" href="/">
+                <div class="brand-wrap">
+                    <img src="{% static 'img/logo-32.png' %}">
+                    Restock Ninja
+                </div>
+            </a>
 
-            <form action="{% url 'search' %}" method="get">
-                <input type="search" name="query" minlength=3 required placeholder="Initiate search sequence...">
-                <input type="submit" value="Go">
+            <img class="menu-button" src="{% static 'img/arrow.png' %}">
+
+            <form class="searchbar" action="{% url 'search' %}" method="get">
+                <input type="text" name="query" minlength=3 required placeholder="Initiate search sequence...">
+                <button type="submit">Go</button>
             </form>
         </div>
 
-        <div class="container">{% block content %}{% endblock %}</div>
+        <div class="content">{% block content %}{% endblock %}</div>
+
+        <footer>
+            &copy; Restock Ninja {% now "Y" %}. All Rights Reserved.
+        </footer>
+
+        <!-- Global scripts -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <!-- Custom scripts for this template -->
+        <script src="{% static 'js/script.js' %}"></script>
+        <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v6.0"></script>
+        {% block script %}{% endblock %}
     </body>
 </html>

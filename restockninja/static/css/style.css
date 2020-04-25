@@ -1,3 +1,117 @@
 body {
     margin: 0;
+    font-family: Helvetica, Arial, sans-serif;
+    background-color: #F0F1F3;
+    color: #363D44;
+}
+
+a {
+    color: #363D44;
+    text-decoration: none;
+}
+
+.flip {
+    transform: rotate(180deg);
+}
+
+.show {
+    display: inline-flex!important;
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background-color: #6C7A89;
+    box-shadow: 0 2px 6px #6C7A89;
+}
+
+.brand {
+    color: white;
+    text-decoration: none;
+    font-size: 1.25rem;
+}
+
+.brand-wrap {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 10px 9px 10px;
+}
+
+.brand-wrap img {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    margin-right: 10px;
+}
+
+.menu-button {
+    display: none;
+}
+
+.searchbar {
+    display: inline-flex;
+    align-items: stretch;
+    flex-grow: 1;
+}
+
+.searchbar input[type=text] {
+    flex-grow: 1;
+    padding: 0 10px;
+    font-size: 1.25rem;
+    color: #363D44;
+    border: 1px solid #6C7A89;
+}
+
+.searchbar button {
+    width: 100px;
+    font-size: 1.25rem;
+    cursor: pointer;
+    background-color: #D2D7DB;
+    color: #363D44;
+    border: 1px solid #6C7A89;
+    border-left: none;
+}
+
+@media screen and (max-width: 600px) {
+    .menu-button {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .searchbar {
+        display: none;
+        width: 100%;
+        height: 50px;
+    }
+}
+
+/* Content */
+.content {
+    padding: 50px 20px 0 20px;
+    min-height: calc(100vh - 190px);
+}
+
+.content-box {
+    background: white;
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 2px 6px #6C7A89;
+}
+
+/* Footer */
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100px;
+    background-color: #6C7A89;
+    color: white;
 }
