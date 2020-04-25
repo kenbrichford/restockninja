@@ -10,12 +10,37 @@
 
 {% block content %}
 {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
-        {{ message }}
-    </li>
-    {% endfor %}
-</ul>
+<div class="content-box">
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
 {% endif %}
+<div class="content-box">
+    <h1>
+        Awesomeness inbound!
+        <img class="big-arrow" src="{% static 'pages/img/curved-arrow.png' %}">
+    </h1>
+    <p>Tired of refreshing every site for that high demand item? We can help with that.</p>
+    <p>Just enter a link from Walmart, BestBuy, or Target to view their current online inventories, or search keywords for items we're already tracking.</p>
+    <p>If you like what we're trying to do, please put in a good word.</p>
+    <ul class="social">
+        <li>
+            <div class="fb-share-button" data-href="https://restock.ninja" data-layout="button" data-size="small">
+                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frestock.ninja%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a>
+            </div>
+        </li>
+        <li>
+            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="Check out how you can search inventories for high demand items all at once." data-url="https://restock.ninja" data-via="RestockNinja" data-show-count="false">Tweet</a>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </li>
+    </ul>
+        
+</div>
+
 {% endblock %}

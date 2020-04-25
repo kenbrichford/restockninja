@@ -1,1 +1,38 @@
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
 
+.messages {
+    color: red;
+}
+
+h1 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+p {
+    margin: 20px 0 0 0;
+}
+
+.big-arrow {
+    float: right;
+    width: 150px;
+}
+
+.social {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.social li {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.social li:not(:last-child) {
+    margin-right: 15px;
+}
