@@ -1,55 +1,79 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load tz %}
+{% load mptt_tags %}
+{% load product_extras %}
 
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block style %}
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css"/>
 <link rel="stylesheet" type="text/css" href="{% static 'products/css/style.css' %}"/>
 {% endblock %}
 
 {% block content %}
-{% for image in images %}
-<img src="{{ image.url }}">
-{% endfor %}
+<div class="container">
+    <div class="breadcrumbs">{% if product.category.parent %}{{ product.category.get_ancestors|tree_path:" › " }} › {% endif %}{{ product.category }} </div>
+    <h1>{{ product.name }}</h1>
+    
+    <div class="image-carousel">
+        <div class="product-images">
+            {% for image in images %}
+            <div class="product-image"><img src="{{ image.url }}"></div>
+            {% endfor %}
+        </div>
+    
+        <img class="prev" src="{% static 'img/dark-arrow.png' %}">
+        <img class="next" src="{% static 'img/dark-arrow.png' %}">
+    </div>
 
-<table>
-    <tr>
-        <td>Name</td>
-        <td>{{ product.name }}</td>
-    </tr>
-    <tr>
-        <td>Brand</td>
-        <td>{{ product.brand }}</td>
-    </tr>
-    <tr>
-        <td>Category</td>
-        <td>{{ product.category }}</td>
-    </tr>
-    <tr>
-        <td>Variants</td>
-        <td>
-            {% for variant in product.variants.all %}
-            <a href="{% url 'product-detail' variant.slug variant.tag %}">
-                <img src="{{ variant.thumbnail }}">
-                {{ variant.name }}
+    <h2>Availability</h2>
+    <div class="listing-table">      
+        {% for price in prices %}
+        <div>
+            <a href="{{ price.listing.url }}" target="_blank">
+                <div class="listing-row">
+                    <div class="listing-cell">
+                        <img class="vendor-logo" src="{{ price.listing.vendor.image.url }}">
+                    </div>
+                    <div class="listing-cell listing-status">
+                        {% if price.available %}{{ price.price|dollars }}<br><span class="available">In Stock</span>
+                        {% else %}<span class="unavailable">Out of Stock</span>{% endif %}
+                    </div>
+                    <div class="listing-cell listing-update">
+                        {% timezone "America/Detroit" %}
+                        {{ price.updated_time|date:"d/m/Y" }}<br>{{ price.updated_time|date:"G:i T" }}
+                        {% endtimezone %}
+                    </div>
+                    <div class="listing-cell">
+                        <button class="buy-button {% if price.available %}available{% else %}unavailable{% endif %}">
+                            {% if price.available %}Buy{% else %}View{% endif %}
+                        </button>
+                    </div>
+                </div>
             </a>
-            {% endfor %}
-        </td>
-    </tr>
-    <tr>
-        <td>Listings</td>
-        <td><table>
-            {% for price in prices %}
-            <tr>
-                <td>{{ price.listing.vendor.name }}</td>
-                <td>
-                    {% if price.available %}In stock{% else %}Out of stock{% endif %} as of {{ price.updated_time }}
-                </td>
-                <td><a href="{{ price.listing.url }}" target="_blank">View item</a></td>
-            </tr>
-            {% endfor %}
-        </table></td>
-    </tr>
-</table>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <h2>Related Items</h2>
+    <div class="cards">
+        {% for variant in product.variants.all %}
+        <a class="content-card" href="{% url 'product-detail' variant.slug variant.tag %}">
+            <div class="thumbnail">
+                <img src="{{ variant.thumbnail }}">
+            </div>
+            {{ variant.name }}
+        </a>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script type="text/javascript" src="{% static 'products/js/script.js' %}"></script>
 {% endblock %}
