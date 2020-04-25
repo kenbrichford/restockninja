@@ -4,22 +4,18 @@
 
 {% block title %}Search: {{ request.GET.query }}{% endblock %}
 
-{% block style %}
-<link rel="stylesheet" type="text/css" href="{% static 'search/css/style.css' %}"/>
-{% endblock %}
+{% block style %}{% endblock %}
 
 {% block content %}
 {% if products %}
 <div class="cards">
     {% for product in products %}
-    <div class="content-card">
-        <a href="{% url 'product-detail' product.slug product.tag %}">
-            <div class="thumbnail">
-                <img src="{{ product.thumbnail }}">
-            </div>
-            {{ product.name }}
-        </a>
-    </div>
+    <a class="content-card" href="{% url 'product-detail' product.slug product.tag %}">
+        <div class="thumbnail">
+            <img src="{{ product.thumbnail }}">
+        </div>
+        {{ product.name }}
+    </a>
     {% endfor %}
 </div>
 
