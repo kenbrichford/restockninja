@@ -83,3 +83,4 @@ venv.bak/
 .DS_Store
 
 # Restock Ninja
+media/
