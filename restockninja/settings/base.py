@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'mptt',
     'django_celery_results',
     'django_celery_beat',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
