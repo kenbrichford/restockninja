@@ -10,7 +10,7 @@
 
 {% block content %}
 {% if messages %}
-<div class="content-box">
+<div class="container content-box">
     <ul class="messages">
         {% for message in messages %}
         <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
@@ -21,7 +21,7 @@
 </div>
 
 {% endif %}
-<div class="content-box">
+<div class="container content-box">
     <h1>
         Awesomeness inbound!
         <img class="big-arrow" src="{% static 'pages/img/curved-arrow.png' %}">
