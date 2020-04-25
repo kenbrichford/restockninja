@@ -35,7 +35,7 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['images'] = Image.objects.filter(product=context['product'])
+        context['images'] = Image.objects.filter(product=context['product']).order_by('-primary')
         context['prices'] = Price.objects.filter(listing__product=context['product'])\
             .order_by('listing', '-updated_time').distinct('listing')
         return context
