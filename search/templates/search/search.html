@@ -10,7 +10,7 @@
 {% if products %}
 <div class="cards">
     {% for product in products %}
-    <a class="content-card" href="{% url 'product-detail' product.slug product.tag %}">
+    <a class="content-card" href="{% url 'product-detail' product.slug product.pk %}">
         <div class="thumbnail">
             <img src="{{ product.thumbnail }}">
         </div>

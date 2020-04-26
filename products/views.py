@@ -9,7 +9,6 @@ from scrape.scrape import Scrape
 class ProductDetailView(DetailView):
     model = Product
     context_object_name = 'product'
-    slug_field = 'tag'
 
     def get_object(self):
         obj = super().get_object()
