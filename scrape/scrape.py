@@ -157,14 +157,14 @@ def upload_listing(product, vendor_name, parsed_data):
 
     listing_data = parsed_data.get('listing')
     
-    listing, created = Listing.objects.get_or_create(
+    listing = Listing.objects.get_or_create(
         product=product,
         vendor=vendor,
         sku=listing_data.sku,
         defaults = {'url': listing_data.url}
     )
 
-    upload_price(listing, parsed_data.get('price'))    
+    upload_price(listing[0], parsed_data.get('price'))    
 
 def get_variants(product_data, product):
     variant_vendor = product_data.variants.get('vendor_name')
@@ -173,4 +173,4 @@ def get_variants(product_data, product):
         sku__in=product_data.variants.get('skus')
     )
     
-    return Product.objects.filter(listing__in=variant_listings).exclude(id=product.id)    
+    return Product.objects.filter(listing__in=variant_listings).exclude(id=product.pk)    
