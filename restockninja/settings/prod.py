@@ -38,14 +38,3 @@ DATABASES = {'default': db_from_env}
 
 # Activate Django-Heroku
 django_heroku.settings(locals())
-
-
-# Media storage
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_NAME'),
-    'API_KEY': os.environ.get('CLOUDINARY_API'),
-    'API_SECRET': os.environ.get('CLOUDINARY_SECRET'),
-    'USE_FILENAME': True,
-    'UNIQUE_FILENAME': False,
-}
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
