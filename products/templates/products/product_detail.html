@@ -62,7 +62,7 @@
     <h2>Related Items</h2>
     <div class="cards">
         {% for variant in product.variants.all %}
-        <a class="content-card" href="{% url 'product-detail' variant.slug variant.tag %}">
+        <a class="content-card" href="{% url 'product-detail' variant.slug variant.pk %}">
             <div class="thumbnail">
                 <img src="{{ variant.thumbnail }}">
             </div>
