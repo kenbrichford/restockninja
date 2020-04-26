@@ -36,5 +36,9 @@ db_from_env = dj_database_url.config()
 DATABASES = {'default': db_from_env}
 
 
+# Cloudinary settings
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCouldinaryStorage'
+
+
 # Activate Django-Heroku
 django_heroku.settings(locals())
