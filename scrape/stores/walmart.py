@@ -4,6 +4,7 @@ from scrape.data_structures import Link, Price, Listing, Product
 class Walmart:
     items_per_request = 20
     call_limit = 5000
+    free_shipping_minimum = 3500
 
     def create_url(self, **kwargs):
         skus = kwargs.get('skus', None)
@@ -61,7 +62,10 @@ class Walmart:
     def parse_price_data(self, item):
         if item.get('availableOnline') and not item.get('marketplace'):
             price = item.get('salePrice') * 100
-            shipping = item.get('standardShipRate') * 100
+            if item.get('standardShipRate'):
+                shipping = item.get('standardShipRate') * 100
+            else:
+                shipping = 0 if price > self.free_shipping_minimum else None
             available = item.get('availableOnline')
         
         else:
