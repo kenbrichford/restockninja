@@ -37,7 +37,7 @@ DATABASES = {'default': db_from_env}
 
 
 # Cloudinary settings
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCouldinaryStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 # Activate Django-Heroku
