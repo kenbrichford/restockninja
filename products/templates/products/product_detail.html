@@ -58,6 +58,7 @@
         {% endfor %}
     </div>
     
+    {% if product.variants.exists %}
     <h2>Related Items</h2>
     <div class="cards">
         {% for variant in product.variants.all %}
@@ -69,7 +70,7 @@
         </a>
         {% endfor %}
     </div>
-
+    {% endif %}
 </div>
 {% endblock %}
 
