@@ -1,7 +1,4 @@
-import re
 import requests
-import threading
-from django.db import connection
 from multiprocessing import Process, Queue
 from products.models import Product, Image, Brand, Category
 from listings.models import Listing, Vendor, Price
@@ -85,15 +82,15 @@ class Scrape:
             product = upload_product(product_data)[0]
             
             for image in image_data:
-                threading.Thread(target=upload_image, args=(product, image)).start()
+                upload_image(product, image)
             
             for store, store_data in data.items():
-                threading.Thread(target=upload_listing, args=(product, store, store_data)).start()
+                upload_listing(product, store, store_data)
 
             if product_data.variants:
                 variants = get_variants(product_data, product)
                 for variant in variants:
-                    threading.Thread(target=product.variants.add, args=(variant,)).start()
+                    product.variants.add(variant)
                 product.save()
             
             return product
