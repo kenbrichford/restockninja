@@ -5,7 +5,6 @@ import dj_database_url
 
 ALLOWED_HOSTS = ['.restock.ninja', 'restockninja.herokuapp.com']
 
-
 # Security settings
 SECURE_SSL_REDIRECT = True
 
@@ -38,6 +37,24 @@ DATABASES = {'default': db_from_env}
 
 # Cloudinary settings
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+# Error logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR')
+        }
+    }
+}
 
 
 # Activate Django-Heroku
