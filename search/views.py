@@ -1,6 +1,7 @@
 import re
 from urllib.parse import urlparse
 from django.contrib import messages
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.shortcuts import render, redirect
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
@@ -55,6 +56,8 @@ def search(request):
         return redirect('/')
     
     else:
-        products = Product.objects.filter(name__search=query)[:10]
+        vector = SearchVector('name')
+        query = SearchQuery(query)
+        products = Product.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank')[:10]
         return render(request, 'search/search.html', {'products': products})
     
