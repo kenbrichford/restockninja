@@ -37,3 +37,22 @@ p {
 .social li:not(:last-child) {
     margin-right: 15px;
 }
+
+/* Onboarding */
+.cards {
+    justify-content: space-between;
+}
+
+.content-card {
+    text-align: center;
+}
+
+i {
+    font-size: 4.5rem;
+}
+
+h3 {
+    font-size: 2rem;
+    font-family: "Gochi Hand";
+    margin: 20px 0;
+}
