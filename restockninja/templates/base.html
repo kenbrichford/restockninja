@@ -3,6 +3,16 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-80074533-4"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-80074533-4');
+        </script>
+        
         <!-- Meta -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -27,6 +37,7 @@
 
         <!-- Custom fonts for this template -->
         <link href="{% static 'css/fonts/style.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css">
 
         <!-- Custom styles for this template -->
         <link href="{% static 'css/style.css' %}" rel="stylesheet">
@@ -51,7 +62,7 @@
             <img class="menu-button" src="{% static 'img/arrow.png' %}">
 
             <form class="searchbar" action="{% url 'search' %}" method="get">
-                <input type="text" name="query" minlength=3 required placeholder="Initiate search sequence...">
+                <input type="text" name="query" minlength=3 required placeholder="Enter product URL or keywords">
                 <button type="submit">Go</button>
             </form>
         </div>
