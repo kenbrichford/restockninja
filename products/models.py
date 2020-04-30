@@ -44,7 +44,7 @@ class Product(Base):
     variants = models.ManyToManyField('self')
 
     def get_absolute_url(self):
-        return '/products/%s/%s' % (self.slug, self.pk)
+        return '/products/%s/%s/' % (self.slug, self.pk)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
