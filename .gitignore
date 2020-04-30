@@ -84,3 +84,4 @@ venv.bak/
 
 # Restock Ninja
 media/
+dev.py
