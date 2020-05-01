@@ -1,8 +1,11 @@
 import requests
+import requests_cache
 from multiprocessing import Process, Queue
 from products.models import Product, Image, Brand, Category
 from listings.models import Listing, Vendor, Price
 from .stores import import_stores
+
+requests_cache.install_cache('search_cache', backend='sqlite', expire_after=43200)
 
 class Scrape:
     def __init__(self, vendor_name):
@@ -11,9 +14,9 @@ class Scrape:
     
     def create_store(self):
         if self.vendor_name == 'Best Buy':
-            return import_stores.BestBuy()  
+            return import_stores.BestBuy()
         elif self.vendor_name == 'Walmart':
-            return import_stores.Walmart()   
+            return import_stores.Walmart()
         elif self.vendor_name == 'Target':
             return import_stores.Target()
 
@@ -22,18 +25,15 @@ class Scrape:
         return self.store.get_items(response.json())
     
     def create_data_dict(self, item):
-        return {self.vendor_name: {
+        return {
             'product': self.store.parse_product_data(item),
             'image': self.store.parse_image_data(item),
             'listing': self.store.parse_listing_data(item),
             'price': self.store.parse_price_data(item),
-        }}
+        }
     
     def format_product_data(self, data):
-        if data.get('Walmart'):
-            product_data = data.get('Walmart').get('product')
-        else:
-            product_data = data.get(self.vendor_name).get('product')
+        product_data = data.get(self.vendor_name).get('product')
         
         if not product_data.thumbnail:
             product_data.thumbnail = next((store_data.get('product').thumbnail\
@@ -50,17 +50,16 @@ class Scrape:
         items = self.get_store_items(url)
 
         if items:
-            data = self.create_data_dict(items[0])
-            queue.put(data)
+            queue.put(self.create_data_dict(items[0]))
         else:
-            queue.put({self.vendor_name: None})
+            queue.put(None)
     
     def scrape_by_url(self, query):
         url = self.store.create_url(skus=query)
         items = self.get_store_items(url)
 
         if items:
-            data = self.create_data_dict(items[0])
+            data = {self.vendor_name: self.create_data_dict(items[0])}
             
             other_vendors = Vendor.objects.exclude(name=self.vendor_name)
             
@@ -71,7 +70,7 @@ class Scrape:
                 for vendor in other_vendors:
                     scrape = Scrape(vendor.name)
                     Process(target=scrape.scrape_by_upc, args=(upc, queue)).start()
-                    data.update(queue.get())
+                    data[vendor.name] = queue.get()
             
             data = {store: store_data for store, store_data in data.items() if store_data}
 
@@ -106,6 +105,17 @@ class Scrape:
             upload_price(listing, price_data)
 
         listing.save()
+
+    def scrape_by_keyword(self, query, queue):
+        url = self.store.create_url(keyword=query)
+        items = self.get_store_items(url)
+
+        results = []
+        if items:
+            for item in items:
+                results.append(self.create_data_dict(item))
+        
+        queue.put(results)
 
 def upload_product(product_data):
     brand = Brand.objects.get_or_create(name=product_data.brand)[0]
@@ -170,4 +180,4 @@ def get_variants(product_data, product):
         sku__in=product_data.variants.get('skus')
     )
     
-    return Product.objects.filter(listing__in=variant_listings).exclude(id=product.pk)    
+    return Product.objects.filter(listing__in=variant_listings).exclude(id=product.pk)
