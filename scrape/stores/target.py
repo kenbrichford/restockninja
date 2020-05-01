@@ -1,4 +1,5 @@
 import os
+import html
 from scrape.data_structures import Link, Price, Listing, Product
 
 class Target:
@@ -8,17 +9,19 @@ class Target:
     def create_url(self, **kwargs):
         skus = kwargs.get('skus', None)
         upc = kwargs.get('upc', None)
+        keyword = kwargs.get('keyword', None)
 
         params = {
             'excludes': 'esp',
             'key': os.getenv('TARGET_API_KEY'),
+            'count': 10
         }
 
         if skus:
             endpoint = 'https://redsky.target.com/v1/plp/collection/%s' % skus
-        elif upc:
+        elif upc or keyword:
             endpoint = 'https://redsky.target.com/v1/plp/search'
-            params['keyword'] = upc
+            params['keyword'] = upc if upc else keyword
 
         return Link(endpoint, params)
 
@@ -30,7 +33,7 @@ class Target:
         return []
     
     def parse_product_data(self, item):
-        name = item.get('title')
+        name = html.unescape(item.get('title'))
         brand = item.get('brand')
         category = [item.get('merch_class').title()]
         upc = item.get('upc')

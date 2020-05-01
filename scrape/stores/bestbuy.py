@@ -8,6 +8,7 @@ class BestBuy:
     def create_url(self, **kwargs):
         skus = kwargs.get('skus', None)
         upc = kwargs.get('upc', None)
+        keyword = kwargs.get('keyword', None)
         
         shown_attributes = [
             'sku', 'url', 'name', 'salePrice', 'categoryPath',
@@ -19,7 +20,7 @@ class BestBuy:
             'apiKey': os.getenv('BESTBUY_API_KEY'),
             'show': ','.join(shown_attributes),
             'format': 'json',
-            'pageSize': 100,
+            'pageSize': 10,
         }
 
         endpoint = 'https://api.bestbuy.com/v1/products'
@@ -28,6 +29,9 @@ class BestBuy:
             endpoint += '(sku in(%s))' % skus
         elif upc:
             endpoint += '(upc=%s)' % upc
+        elif keyword:
+            key_string = '&search='.join(keyword.split(' '))
+            endpoint += '(search=%s)' % key_string
 
         return Link(endpoint, params)
 
@@ -42,7 +46,12 @@ class BestBuy:
         brand = item.get('manufacturer')
         category = [c.get('name') for c in item.get('categoryPath')][1:]
         upc = item.get('upc')
-        thumbnail = item.get('thumbnailImage')
+        if item.get('thumbnailImage'):
+            thumbnail = item.get('thumbnailImage') 
+        elif item.get('images'):
+            thumbnail = item.get('images')[0].get('href')
+        else:
+            thumbnail = None
         variants = [i.get('sku') for i in item.get('productVariations')]
 
         return Product(name, brand, category, upc, thumbnail, variants)

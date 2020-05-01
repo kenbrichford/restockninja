@@ -9,18 +9,22 @@ class Walmart:
     def create_url(self, **kwargs):
         skus = kwargs.get('skus', None)
         upc = kwargs.get('upc', None)
+        keyword = kwargs.get('keyword', None)
         
         params = {
-            'apiKey': os.getenv('WALMART_API_KEY'),
-            'ids': skus
+            'apiKey': os.getenv('WALMART_API_KEY')
         }
+
+        endpoint = 'http://api.walmartlabs.com/v1/items'
 
         if skus:
             params['ids'] = skus
         elif upc:
             params['upc'] = upc
-
-        endpoint = 'http://api.walmartlabs.com/v1/items'
+        elif keyword:
+            endpoint = 'http://api.walmartlabs.com/v1/search'
+            params['query'] = keyword
+        
 
         return Link(endpoint, params)
     
@@ -45,14 +49,17 @@ class Walmart:
     
     def parse_image_data(self, item):
         images = []
+        
+        if item.get('imageEntities'):
+            for image in item.get('imageEntities'):
+                if image.get('entityType') == 'PRIMARY':
+                    primary = True
+                else:
+                    primary = False
 
-        for image in item.get('imageEntities'):
-            if image.get('entityType') == 'PRIMARY':
-                primary = True
-            else:
-                primary = False
-
-            images.append({'url': image.get('largeImage'), 'primary': primary})
+                images.append({'url': image.get('largeImage'), 'primary': primary})
+        elif item.get('largeImage'):
+            images.append({'url': item.get('largeImage'), 'primary': True})
 
         return images
     
