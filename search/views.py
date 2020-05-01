@@ -1,5 +1,6 @@
 import re
 from urllib.parse import urlparse
+from multiprocessing import Process, Queue
 from django.contrib import messages
 from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.shortcuts import render, redirect
@@ -11,8 +12,8 @@ from scrape.scrape import Scrape
 
 stores = [
     {'name': 'Walmart', 'domain': 'walmart', 'pattern': r'(?<=\/)\d{8,9}$'},
+    {'name': 'Target', 'domain': 'target', 'pattern': r'(?<=(\/A-))\d{8}$'},
     {'name': 'Best Buy', 'domain': 'bestbuy', 'pattern': r'(?<=\/)\d{7}(?=(\.p)$)'},
-    {'name': 'Target', 'domain': 'target', 'pattern': r'(?<=(\/A-))\d{8}$'}
 ]
 
 def get_sku(pattern, url_path):
@@ -22,10 +23,26 @@ def get_sku(pattern, url_path):
         return None
 
 def search(request):
-    validate = URLValidator()
-    query = request.GET.get('query', None)
+    query = request.GET.get('query')
+    store = request.GET.get('store')
+    sku = request.GET.get('sku')
+
+    if store and store.strip() and sku and sku.strip():
+        store = store.strip()
+        sku = sku.strip()
+
+        listing = Listing.objects.filter(vendor__name=store, sku=sku)
+
+        if listing.exists():
+            return redirect(listing.first().product)
+
+        scrape = Scrape(store)
+        return redirect(scrape.scrape_by_url(sku))
 
     if query and query.strip():
+        query = query.strip()
+        validate = URLValidator()
+
         try:
             validate(query)
             url = urlparse(query)
@@ -60,7 +77,14 @@ def search(request):
             products = Product.objects.annotate(search=SearchVector('name'))\
                 .filter(search=SearchQuery(query))[:10]
 
-            return render(request, 'search/search.html', {'products': products})
+            results = {}
+            queue = Queue()
+            for store in stores:
+                scrape = Scrape(store.get('name'))
+                Process(target=scrape.scrape_by_keyword, args=(query, queue)).start()
+                results[store.get('name')] = queue.get()
+
+            return render(request, 'search/search.html', {'products': products, 'results': results})
     
     return redirect('/')
     
