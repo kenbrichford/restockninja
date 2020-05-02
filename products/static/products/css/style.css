@@ -145,6 +145,5 @@ button.unavailable {
 
 /* Variants */
 .cards {
-    justify-content: flex-start;
     max-width: 1000px;
 }
