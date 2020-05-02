@@ -10,21 +10,19 @@
 
 {% block content %}
 {% if products %}
-<h2>Tracked Products</h2>
+<h2 class="lead">Tracked Products</h2>
 <div class="cards">
     {% for product in products %}
     <a class="content-card" href="{% url 'product-detail' product.slug product.pk %}">
-        <div class="thumbnail">
-            <img src="{{ product.thumbnail }}">
-        </div>
-        {{ product.name }}
+        <div class="thumbnail"><img src="{{ product.thumbnail }}"></div>
+        <div class="title">{{ product.name }}</div>
     </a>
     {% endfor %}
 </div>
 
 {% else %}
 <div class="container content-box">
-    Sorry, no items matched your search. Please try again or enter a link to add a new item.
+    We aren't currently tracking any items that match your search. Please choose one below or enter a link to add a new item.
 </div>
 {% endif %}
 
@@ -36,7 +34,7 @@
     {% for item in items %}
     <a class="content-card" href="{% url 'search' %}?store={{ store}}&sku={{ item.listing.sku }}">
         <div class="thumbnail"><img src="{{ item.product.thumbnail }}"></div>
-        {{ item.product.name }}
+        <div class="title">{{ item.product.name }}</div>
     </a>
     {% endfor %}
 </div>
