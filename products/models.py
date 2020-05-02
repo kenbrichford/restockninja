@@ -24,8 +24,8 @@ def category_key():
             return key
 
 class Base(models.Model):
-    name = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, editable=False)
+    name = models.CharField(max_length=500)
+    slug = models.SlugField(max_length=500, editable=False)
 
     class Meta:
         abstract = True
