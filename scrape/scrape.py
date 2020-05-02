@@ -5,7 +5,7 @@ from products.models import Product, Image, Brand, Category
 from listings.models import Listing, Vendor, Price
 from .stores import import_stores
 
-requests_cache.install_cache('search_cache', backend='sqlite', expire_after=43200)
+requests_cache.install_cache(expire_after=43200)
 
 class Scrape:
     def __init__(self, vendor_name):
