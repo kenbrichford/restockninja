@@ -79,27 +79,6 @@ a {
     border-left: none;
 }
 
-@media screen and (max-width: 600px) {
-    .menu-button {
-        display: inline-block;
-        margin-right: 10px;
-    }
-
-    .searchbar {
-        display: none;
-        width: 100%;
-        height: 50px;
-    }
-
-    .searchbar input[type=text] {
-        font-size: 1rem;
-    }
-    
-    .searchbar button {
-        font-size: 1rem;
-    }
-}
-
 /* Content */
 .content {
     padding: 50px 20px 20px 20px;
@@ -123,13 +102,14 @@ a {
 .cards {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     margin: -10px;
 }
 
 .content-card {
     background: white;
-    width: 240px;
+    width: 100%;
+    max-width: 200px;
     margin: 10px;
     padding: 20px;
     box-shadow: 0 2px 6px #6C7A89;
@@ -148,6 +128,12 @@ a {
     max-width: 100%;
 }
 
+.title {
+    height: 3rem;
+    line-height: 1rem;
+    overflow: hidden;
+}
+
 .error-home {
     text-decoration: underline;
 }
@@ -161,4 +147,31 @@ footer {
     height: 100px;
     background-color: #6C7A89;
     color: white;
+}
+
+@media screen and (max-width: 600px) {
+    /* NavBar */
+    .menu-button {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .searchbar {
+        display: none;
+        width: 100%;
+        height: 50px;
+    }
+
+    .searchbar input[type=text] {
+        font-size: 1rem;
+    }
+    
+    .searchbar button {
+        font-size: 1rem;
+    }
+
+    /* Cards */
+    .content-card {
+        max-width: 100%;
+    }
 }
