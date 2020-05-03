@@ -71,7 +71,6 @@ def search(request):
                         return redirect(product)
             
             messages.error(request, 'Sorry, we couldn\'t find a matching product from your link. Please try again.')
-            return redirect('/')
         
         else:
             products = Product.objects.annotate(search=SearchVector('name'))\
