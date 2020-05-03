@@ -154,7 +154,7 @@ def upload_price(listing, parsed_data):
             listing = listing,
             price = parsed_data.price,
             shipping = parsed_data.shipping,
-            available = parsed_data.available
+            is_available = parsed_data.available
         )
         
         price.save()
