@@ -1,4 +1,4 @@
-from django.urls import re_path, register_converter
+from django.urls import re_path
 from .views import ProductDetailView
 
 urlpatterns = [
