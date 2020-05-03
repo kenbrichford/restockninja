@@ -80,6 +80,20 @@ a {
 }
 
 /* Content */
+.messages {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
+}
+
 .content {
     padding: 50px 20px 20px 20px;
     min-height: calc(100vh - 170px);
