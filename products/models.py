@@ -38,7 +38,6 @@ class Product(Base):
     id = models.CharField(primary_key=True, max_length=7, default=product_key)
     brand = models.ForeignKey('Brand', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, null=True)
-    featured = models.BooleanField(default=False)
     upc = models.CharField(max_length=13, blank=True, null=True)
     thumbnail = models.URLField()
     variants = models.ManyToManyField('self')
