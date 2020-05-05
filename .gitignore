@@ -86,3 +86,4 @@ venv.bak/
 media/
 dev.py
 *.sqlite
+tmp/
