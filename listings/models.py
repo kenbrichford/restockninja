@@ -8,6 +8,7 @@ class Listing(models.Model):
     sku = models.CharField(max_length=20)
     url = models.URLField(max_length=500, blank=True)
     updated_time = models.DateTimeField(auto_now=True)
+    error = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ['sku', 'vendor']
@@ -29,7 +30,6 @@ class Price(models.Model):
     is_available = models.BooleanField()
     created_time = models.DateTimeField(auto_now_add=True)
     updated_time = models.DateTimeField(auto_now=True)
-    is_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return '%s: %s' % (self.listing, self.created_time)
