@@ -41,6 +41,7 @@ class Product(Base):
     upc = models.CharField(max_length=13, blank=True, null=True)
     thumbnail = models.URLField()
     variants = models.ManyToManyField('self')
+    total_alerts = models.PositiveIntegerField(default=0)
 
     def get_absolute_url(self):
         return '/products/%s/%s/' % (self.slug, self.pk)
