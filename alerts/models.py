@@ -24,5 +24,5 @@ class Alert(models.Model):
     email_frequency = models.PositiveIntegerField(
         choices=FREQUENCIES,
         default=86400,
-        )
+    )
     last_notified = models.DateTimeField(null=True)
