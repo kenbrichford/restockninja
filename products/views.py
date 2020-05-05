@@ -1,4 +1,3 @@
-import threading
 from datetime import timedelta
 from django.utils import timezone
 from django.views.generic import DetailView
@@ -21,16 +20,9 @@ class ProductDetailView(DetailView):
             product=obj
         )
 
-        jobs = []
         for listing in listings:
             scrape = Scrape(listing.vendor.name)
-            jobs.append(threading.Thread(target=scrape.scrape_by_listing, args=(listing,)))
-        
-        for job in jobs:
-            job.start()
-        
-        for job in jobs:
-            job.join()
+            scrape.scrape_by_listing([listing])
 
         return obj
 
