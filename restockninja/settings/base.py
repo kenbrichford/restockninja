@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'products',
     'search',
     'alerts',
+    'scrape',
 
     'mptt',
     'django_celery_results',
@@ -62,8 +63,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
-                # 'search.context_processors.include_search_form',
             ],
         },
     },
@@ -138,6 +137,8 @@ CELERY_REDIS_CONNECT_TIMEOUT = 10
 
 
 # Email
-EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
-SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'tmp/alert-emails')
+# EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+# SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+# SENDGRID_SANDBOX_MODE_IN_DEBUG = False
