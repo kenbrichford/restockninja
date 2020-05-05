@@ -3,9 +3,8 @@ import requests_cache
 from multiprocessing import Process, Queue
 from products.models import Product, Image, Brand, Category
 from listings.models import Listing, Vendor, Price
+from alerts.alert import send_alerts
 from .stores import import_stores
-
-requests_cache.install_cache(expire_after=43200)
 
 class Scrape:
     def __init__(self, vendor_name):
@@ -96,17 +95,30 @@ class Scrape:
         
         return None
     
-    def scrape_by_listing(self, listing):
-        url = self.store.create_url(skus=listing.sku)
+    def scrape_by_listing(self, listings):
+        truncated_listings = {listing.sku: listing for listing in listings[:self.store.items_per_request]}
+
+        url = self.store.create_url(skus=','.join(truncated_listings))
         items = self.get_store_items(url)
 
         if items:
-            price_data = self.store.parse_price_data(items[0])
-            upload_price(listing, price_data)
+            for item in items:
+                listing_data = self.store.parse_listing_data(item)
+                price_data = self.store.parse_price_data(item)
 
-        listing.save()
+                listing = truncated_listings.pop(listing_data.sku)
+                
+                upload_price(listing, price_data)
+            
+                listing.save()
+
+        for listing in list(truncated_listings.values()):
+            listing.error = True
+            listing.save()
 
     def scrape_by_keyword(self, query, queue):
+        requests_cache.install_cache(expire_after=43200)
+
         url = self.store.create_url(keyword=query)
         items = self.get_store_items(url)
 
@@ -148,7 +160,7 @@ def upload_price(listing, parsed_data):
     if last_price and last_price.price == parsed_data.price\
         and last_price.shipping == parsed_data.shipping:
         last_price.save()
-
+        price = last_price
     else:
         price = Price.objects.create(
             listing = listing,
@@ -156,8 +168,10 @@ def upload_price(listing, parsed_data):
             shipping = parsed_data.shipping,
             is_available = parsed_data.available
         )
-        
         price.save()
+        
+        if price.is_available:
+            send_alerts(price)
 
 def upload_listing(product, vendor_name, parsed_data):
     vendor = Vendor.objects.get(name=vendor_name)
