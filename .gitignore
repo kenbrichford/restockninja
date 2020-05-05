@@ -87,3 +87,4 @@ media/
 dev.py
 *.sqlite
 tmp/
+alert_trigger.txt
