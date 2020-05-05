@@ -80,12 +80,10 @@ h2 {
 /* Tooltips */
 .tooltip {
     font-size: 1rem;
-    position: relative;
     display: inline-block;
-    vertical-align: middle;
+    position: relative;
   }
-  
-  /* Tooltip text */
+
   .tooltip .tooltiptext {
     visibility: hidden;
     font-size: .9rem;
@@ -94,13 +92,12 @@ h2 {
     background-color: rgba(54,61,68, .9);
     color: #fff;
     padding: 10px;
-   
-    /* Position the tooltip text - see examples below! */
     position: absolute;
     z-index: 1;
+    top: 100%;
+    left: calc(50% - 100px);
   }
   
-  /* Show the tooltip text when you mouse over the tooltip container */
   .tooltip:hover .tooltiptext {
     visibility: visible;
   }
@@ -138,7 +135,7 @@ h2 {
 }
 
 .listing-status {
-    width: 80px;
+    padding: 0 10px;
 }
 
 span.available {
@@ -147,6 +144,7 @@ span.available {
 
 span.unavailable {
     color: #868A8E;
+    word-wrap: ;
 }
 
 .buy-button {
@@ -175,7 +173,6 @@ button.unavailable {
 
 .alert-table form {
     display: flex;
-    margin-bottom: 20px;
 }
 
 .alert-field {
@@ -183,7 +180,6 @@ button.unavailable {
     margin: 0;
     padding: 0;
     list-style: none;
-    min-width: 110px;
 }
 
 .email-field {
@@ -256,8 +252,28 @@ button.unavailable {
 }
 
 
-/* Screens smaller than 600px wide */
-@media screen and (max-width: 600px) {
+/* Screens smaller than 500px wide */
+@media screen and (max-width: 500px) {
+    .tooltip {
+        position: inherit;
+    }
+
+    .tooltip .tooltiptext {
+        top: inherit;
+    }
+
+    .alert-table form {
+        flex-wrap: wrap;
+    }
+
+    .email-field {
+        width: 100%;
+    }
+
+    #id_email {
+        border: 1px solid #6C7A89;
+        margin-bottom: 10px;;
+    }
 }
 
 
@@ -269,13 +285,5 @@ button.unavailable {
 
     .listing-update {
         display: none;
-    }
-
-    #id_email, #id_email_frequency, #id-submit {
-        padding: 0;
-    }
-
-    #id_email_frequency {
-        background-position: 90% 50%;
     }
 }

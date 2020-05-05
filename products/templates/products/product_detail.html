@@ -58,29 +58,27 @@
                 </div>
             </h2>
             {% for price in prices %}
-            <div>
-                <a href="{{ price.listing.url }}" target="_blank">
-                    <div class="listing-row">
-                        <div class="listing-cell">
-                            <img class="vendor-logo" src="{{ price.listing.vendor.image.url }}">
-                        </div>
-                        <div class="listing-cell listing-status">
-                            {% if price.is_available %}{{ price.price|dollars }}<br><span class="available">In Stock</span>
-                            {% else %}<span class="unavailable">Out of Stock</span>{% endif %}
-                        </div>
-                        <div class="listing-cell listing-update">
-                            {% timezone "America/Detroit" %}
-                            {{ price.updated_time|date:"d/m/Y" }}<br>{{ price.updated_time|date:"G:i T" }}
-                            {% endtimezone %}
-                        </div>
-                        <div class="listing-cell">
-                            <button class="buy-button {% if price.is_available %}available{% else %}unavailable{% endif %}">
-                                {% if price.is_available %}Buy{% else %}View{% endif %}
-                            </button>
-                        </div>
+            <a href="{{ price.listing.url }}" target="_blank">
+                <div class="listing-row">
+                    <div class="listing-cell">
+                        <img class="vendor-logo" src="{{ price.listing.vendor.image.url }}">
                     </div>
-                </a>
-            </div>
+                    <div class="listing-cell listing-status">
+                        {% if price.is_available %}{{ price.price|dollars }}<br><span class="available">In Stock</span>
+                        {% else %}<span class="unavailable">Out of Stock</span>{% endif %}
+                    </div>
+                    <div class="listing-cell listing-update">
+                        {% timezone "America/Detroit" %}
+                        {{ price.updated_time|date:"d/m/Y" }}<br>{{ price.updated_time|date:"G:i T" }}
+                        {% endtimezone %}
+                    </div>
+                    <div class="listing-cell">
+                        <button class="buy-button {% if price.is_available %}available{% else %}unavailable{% endif %}">
+                            {% if price.is_available %}Buy{% else %}View{% endif %}
+                        </button>
+                    </div>
+                </div>
+            </a>
             {% endfor %}
         </div>
         
@@ -95,7 +93,7 @@
                 {% endfor %}
                 
                 {% for field in alert_form.visible_fields %}
-                <ul class="alert-field {% if forloop.first %}email-field{% endif %}">
+                <ul class="alert-field {% if forloop.first %}email-field{% else %}frequency-field{% endif %}">
                     {{ field.errors }}
                     <li class="alert-label">
                         {{ field.label_tag }}
