@@ -43,6 +43,9 @@ class Product(Base):
     variants = models.ManyToManyField('self')
     total_alerts = models.PositiveIntegerField(default=0)
 
+    class Meta:
+        ordering = ['-total_alerts']
+
     def get_absolute_url(self):
         return '/products/%s/%s/' % (self.slug, self.pk)
 
