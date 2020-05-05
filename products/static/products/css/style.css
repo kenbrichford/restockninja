@@ -10,6 +10,7 @@ h2 {
     margin-top: 40px;
 }
 
+
 /* Image carousel */
 .slick-initialized .slick-slide {
     display: inline-block;
@@ -70,8 +71,44 @@ h2 {
     color: #363D44;
 }
 
+
+/* Alerts and availability */
+.alert-wrapper {
+    display: flex;
+}
+
+/* Tooltips */
+.tooltip {
+    font-size: 1rem;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    font-size: .9rem;
+    text-align: center;
+    width: 200px;
+    background-color: rgba(54,61,68, .9);
+    color: #fff;
+    padding: 10px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+
 /* Listing table */
 .listing-table {
+    width: 50%;
+    max-width: 470px;
     margin-bottom: -20px;
 }
 
@@ -81,10 +118,10 @@ h2 {
     align-items: center;
     background-color: white;
     box-shadow: 0 2px 6px #6C7A89;
-    padding: 30px;
+    box-sizing: border-box;
     margin-bottom: 20px;
-    width: calc(100% - 40px);
-    max-width: 500px;
+    padding: 20px;
+    width: 100%;
 }
 
 .listing-cell {
@@ -96,7 +133,7 @@ h2 {
 }
 
 .vendor-logo {
-    width: 120px;
+    width: 100px;
     vertical-align: middle;
 }
 
@@ -129,11 +166,103 @@ button.unavailable {
     background-color: #D2D7DB;
 }
 
-@media screen and (max-width: 600px) {
-    .listing-row {
-        padding: 20px;
+/* Alert table */
+.alert-table {
+    width: 50%;
+    max-width: 470px;
+    margin-left: 20px;
+}
+
+.alert-table form {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.alert-field {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    min-width: 110px;
+}
+
+.email-field {
+    flex-grow: 1;
+}
+
+.alert-label {
+    height: 20px;
+}
+
+.alert-input {
+    margin-top: 10px;
+}
+
+#id_email, #id_email_frequency, #id-submit {
+    font-size: 1rem;
+    padding: 0 10px;
+    height: 40px;
+    border: 1px solid #6C7A89;
+    box-sizing: border-box;
+    border: 1px solid #6C7A89;
+    border-radius: 0;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    -moz-appearance: none;
+    -moz-border-radius: 0px;
+}
+
+#id_email, #id_email_frequency {
+    border-right: none;
+}
+
+#id_email {
+    width: 100%;
+}
+
+#id_email_frequency {
+    width: 121px;
+    background-color: white;
+    background-image: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'><path fill='%23444' d='M7.406 7.828l4.594 4.594 4.594-4.594 1.406 1.406-6 6-6-6z'></path></svg>");
+    background-position: 100% 50%;
+    background-repeat: no-repeat;
+}
+
+#id-submit {
+    background-color: #D2D7DB;
+    align-self: flex-end;
+}
+
+
+/* Variants */
+.cards {
+    max-width: 1000px;
+}
+
+
+/* Screens smaller than 900px wide */
+@media screen and (max-width: 900px) {
+    .alert-wrapper {
+        flex-wrap: wrap;
     }
 
+    .listing-table, .alert-table {
+        width: 100%;
+    }
+
+    .alert-table {
+        margin: 0;
+    }
+}
+
+
+/* Screens smaller than 600px wide */
+@media screen and (max-width: 600px) {
+}
+
+
+/* Screens smaller than 400px wide */
+@media screen and (max-width: 400px) {
     .vendor-logo {
         width: 80px;
     }
@@ -141,9 +270,12 @@ button.unavailable {
     .listing-update {
         display: none;
     }
-}
 
-/* Variants */
-.cards {
-    max-width: 1000px;
+    #id_email, #id_email_frequency, #id-submit {
+        padding: 0;
+    }
+
+    #id_email_frequency {
+        background-position: 90% 50%;
+    }
 }
