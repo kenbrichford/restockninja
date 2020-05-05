@@ -3,7 +3,19 @@ from products.models import Product
 from .models import Alert, Email
 
 class AlertForm(forms.ModelForm):
-    email = forms.EmailField()
+    FREQUENCIES = [
+        (604800, 'Weekly'),
+        (86400, 'Daily'),
+        (43200, 'Two per day'),
+        (28800, 'Three per day'),
+        (3600, 'Hourly'),
+        (0, 'All updates'),
+    ]
+
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'placeholder': 'Enter valid email address'})
+    )
+    email_frequency = forms.ChoiceField(label='Frequency', choices=FREQUENCIES)
     product = forms.ModelChoiceField(
         queryset=Product.objects.all(),
         widget=forms.HiddenInput()
@@ -11,7 +23,7 @@ class AlertForm(forms.ModelForm):
 
     class Meta:
         model = Alert
-        fields = ['email', 'verify', 'product']
+        fields = ['email', 'email_frequency', 'product']
 
     def clean(self):
         if self.cleaned_data.get('email'):
