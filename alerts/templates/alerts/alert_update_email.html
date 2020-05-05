@@ -1,0 +1,15 @@
+{% autoescape off %}
+Hiya,
+
+Great news! It looks like {{ product.name }} is back in stock at {{ vendor }}. Click the following link to see for yourself at Restock Ninja:
+
+{{ domain }}{% url 'product-detail' product.slug product.pk %}
+
+If you would like to unsubscribe from this alert click here:
+
+{{ domain }}{% url 'delete-alert' alert_uid alert_token %}
+
+If you would like to unsubscribe from all Restock Ninja alerts click here:
+
+{{ domain }}{% url 'delete-email' email_uid email_token %}
+{% endautoescape %}

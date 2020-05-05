@@ -1,0 +1,10 @@
+.unsubscribe {
+    text-align: center;
+}
+
+.unsubscribe input {
+    padding: 10px;
+    border: 1px solid #6C7A89;
+    background-color: #D2D7DB;
+    font-size: 1rem;
+}

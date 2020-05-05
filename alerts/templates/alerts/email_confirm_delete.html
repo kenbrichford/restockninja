@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Delete All Alerts{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'alerts/css/style.css' %}"/>
+{% endblock %}
+
+{% block content %}
+<form class="container unsubscribe" method="post">{% csrf_token %}
+    <p>Are you sure you want to unsubscribe from all alerts?</p>
+    <input type="submit" value="Confirm">
+</form>
+{% endblock %}

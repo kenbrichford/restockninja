@@ -3,7 +3,7 @@ Hiya,
 
 You've just subscribed to an alert for {{ product.name }} on Restock Ninja. Please click the following link to confirm your subscription:
 
-http://{{ domain }}{% url 'confirm_alert' uid token %}
+{{ domain }}{% url 'confirm-alert' uid token %}
 
 If you've received this message by mistake, just ignore it, and you won't be contacted again.
 {% endautoescape %}
