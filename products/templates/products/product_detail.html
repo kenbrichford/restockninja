@@ -41,40 +41,88 @@
         <img class="next" src="{% static 'img/dark-arrow.png' %}">
     </div>
 
-    <h2>Availability</h2>
-    <div class="listing-table">      
-        {% for price in prices %}
-        <div>
-            <a href="{{ price.listing.url }}" target="_blank">
-                <div class="listing-row">
-                    <div class="listing-cell">
-                        <img class="vendor-logo" src="{{ price.listing.vendor.image.url }}">
-                    </div>
-                    <div class="listing-cell listing-status">
-                        {% if price.is_available %}{{ price.price|dollars }}<br><span class="available">In Stock</span>
-                        {% else %}<span class="unavailable">Out of Stock</span>{% endif %}
-                    </div>
-                    <div class="listing-cell listing-update">
-                        {% timezone "America/Detroit" %}
-                        {{ price.updated_time|date:"d/m/Y" }}<br>{{ price.updated_time|date:"G:i T" }}
-                        {% endtimezone %}
-                    </div>
-                    <div class="listing-cell">
-                        <button class="buy-button {% if price.is_available %}available{% else %}unavailable{% endif %}">
-                            {% if price.is_available %}Buy{% else %}View{% endif %}
-                        </button>
-                    </div>
+    <div class="alert-wrapper">
+        <div class="listing-table">
+            <h2>
+                Availability
+                <div class="tooltip">
+                    <svg class="bi bi-info-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd"/>
+                        <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+                        <circle cx="8" cy="4.5" r="1"/>
+                    </svg>
+                    <span class="tooltiptext">
+                        Please note, we cannot guarantee 100% accuracy of the prices and availabilities shown on this page.<br><br>
+                        Sites will sometimes claim stock is available when that is not actually the case. 
+                    </span>
                 </div>
-            </a>
+            </h2>
+            {% for price in prices %}
+            <div>
+                <a href="{{ price.listing.url }}" target="_blank">
+                    <div class="listing-row">
+                        <div class="listing-cell">
+                            <img class="vendor-logo" src="{{ price.listing.vendor.image.url }}">
+                        </div>
+                        <div class="listing-cell listing-status">
+                            {% if price.is_available %}{{ price.price|dollars }}<br><span class="available">In Stock</span>
+                            {% else %}<span class="unavailable">Out of Stock</span>{% endif %}
+                        </div>
+                        <div class="listing-cell listing-update">
+                            {% timezone "America/Detroit" %}
+                            {{ price.updated_time|date:"d/m/Y" }}<br>{{ price.updated_time|date:"G:i T" }}
+                            {% endtimezone %}
+                        </div>
+                        <div class="listing-cell">
+                            <button class="buy-button {% if price.is_available %}available{% else %}unavailable{% endif %}">
+                                {% if price.is_available %}Buy{% else %}View{% endif %}
+                            </button>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-        <form action="{% url 'create_alert' %}" method="post">
-            {% csrf_token %}
-            {{ alert_form }}
-            <input type="submit" value="Submit">
-        </form>
         
+        <div class="alert-table">
+            <h2>Alerts</h2>
+            <form action="{% url 'create-alert' %}" method="post">
+                {% csrf_token %}
+                {{ alert_form.non_field_errors }}
+                
+                {% for hidden in alert_form.hidden_fields %}
+                {{ hidden }}
+                {% endfor %}
+                
+                {% for field in alert_form.visible_fields %}
+                <ul class="alert-field {% if forloop.first %}email-field{% endif %}">
+                    {{ field.errors }}
+                    <li class="alert-label">
+                        {{ field.label_tag }}
+                        {% if forloop.last %}
+                        <div class="tooltip">
+                            <svg class="bi bi-info-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd"/>
+                                <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+                                <circle cx="8" cy="4.5" r="1"/>
+                            </svg>
+                            <span class="tooltiptext">
+                                Because some items have a tendency to go in and out of stock, we suggest setting a smaller email frequency to avoid your inbox getting blasted with updates.
+                            </span>
+                        </div>
+                        {% endif %}
+                    </li>
+                    <li class="alert-input">{{ field }}</li>
+                </ul>
+                {% endfor %}
+
+                <button id="id-submit" type="submit">Submit</button>
+            </form>
+        </div>
+
     </div>
+    
+
     
     {% if product.variants.exists %}
     <h2>Related Items</h2>
