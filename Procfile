@@ -1,3 +1,3 @@
-web: gunicorn restockninja.wsgi --log-file -
-worker: celery -A restockninja worker --log-file -
-beat: celery -A restockninja beat --log-file -
+web: gunicorn restockninja.wsgi
+worker: celery -A restockninja worker
+beat: celery -A restockninja beat
