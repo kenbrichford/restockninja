@@ -82,9 +82,9 @@ h2 {
     font-size: 1rem;
     display: inline-block;
     position: relative;
-  }
+}
 
-  .tooltip .tooltiptext {
+.tooltip .tooltiptext {
     visibility: hidden;
     font-size: .9rem;
     text-align: center;
@@ -96,11 +96,11 @@ h2 {
     z-index: 1;
     top: 100%;
     left: calc(50% - 100px);
-  }
+}
   
-  .tooltip:hover .tooltiptext {
+.tooltip:hover .tooltiptext {
     visibility: visible;
-  }
+}
 
 /* Listing table */
 .listing-table {
