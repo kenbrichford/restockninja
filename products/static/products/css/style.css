@@ -135,7 +135,7 @@ h2 {
 }
 
 .listing-status {
-    padding: 0 10px;
+    width: 80px;
 }
 
 span.available {
