@@ -134,11 +134,3 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_REDIS_MAX_CONNECTIONS = 20
 
 CELERY_REDIS_CONNECT_TIMEOUT = 10
-
-
-# Email
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'tmp/alert-emails')
-# EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
-# SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-# SENDGRID_SANDBOX_MODE_IN_DEBUG = False

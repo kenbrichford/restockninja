@@ -57,5 +57,10 @@ LOGGING = {
 }
 
 
+# Email
+EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
+
 # Activate Django-Heroku
 django_heroku.settings(locals())
