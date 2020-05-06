@@ -19,7 +19,7 @@ def send_alert_email(subject, message, alert):
 def send_update_email(alert, price):
     subject = '%s is back in stock!' % alert.product.name
     message = render_to_string('alerts/alert_update_email.html', {
-        'domain': 'http://localhost:8000',
+        'domain': 'https://restock.ninja',
         'product': alert.product,
         'vendor': price.listing.vendor.name,
         'alert_uid': urlsafe_base64_encode(force_bytes(alert.pk)),
@@ -33,7 +33,7 @@ def send_update_email(alert, price):
 def send_confirmation_email(alert):
     subject = 'Confirm your alert for %s on Restock Ninja' % alert.product.name
     message = render_to_string('alerts/alert_confirmation_email.html', {
-        'domain': 'http://localhost:8000',
+        'domain': 'https://restock.ninja',
         'product': alert.product,
         'uid': urlsafe_base64_encode(force_bytes(alert.pk)),
         'token': alert_confirmation_token.make_token(alert),
