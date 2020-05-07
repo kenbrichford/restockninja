@@ -57,7 +57,7 @@ class Target:
                 for image in item.get('images')[0].get('alternate_urls'):
                     images.append({'url': base_url + image, 'primary': False})
 
-        return images
+        return images[:5]
     
     def parse_listing_data(self, item):
         sku = item.get('tcin')

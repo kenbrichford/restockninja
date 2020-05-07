@@ -66,7 +66,7 @@ class BestBuy:
                     'primary': image.get('primary')
                 })
 
-        return images
+        return images[:5]
     
     def parse_listing_data(self, item):
         return Listing(str(item.get('sku')), item.get('url'))

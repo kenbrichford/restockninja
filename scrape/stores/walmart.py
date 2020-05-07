@@ -61,7 +61,7 @@ class Walmart:
         elif item.get('largeImage'):
             images.append({'url': item.get('largeImage'), 'primary': True})
 
-        return images
+        return images[:5]
     
     def parse_listing_data(self, item):
         return Listing(str(item.get('itemId')), item.get('productUrl'))
