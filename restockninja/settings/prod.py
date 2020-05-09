@@ -60,6 +60,9 @@ LOGGING = {
 # Email
 EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+SENDGRID_TRACK_EMAIL_OPENS = True
+SENDGRID_TRACK_CLICKS_HTML = False
+SENDGRID_TRACK_CLICKS_PLAIN = False
 
 
 # Activate Django-Heroku
