@@ -178,11 +178,13 @@ def upload_listing(product, vendor_name, parsed_data):
 
     listing_data = parsed_data.get('listing')
     
-    listing = Listing.objects.get_or_create(
-        product=product,
+    listing = Listing.objects.update_or_create(
         vendor=vendor,
         sku=listing_data.sku,
-        defaults = {'url': listing_data.url}
+        defaults = {
+            'product': product,
+            'url': listing_data.url
+        }
     )
 
     upload_price(listing[0], parsed_data.get('price'))    
