@@ -77,10 +77,11 @@ class Scrape:
 
             image_data = max((store_data.get('image', []) for store, store_data in data.items()), key=len)
 
-            product = upload_product(product_data)[0]
+            product, created = upload_product(product_data)
             
-            for image in image_data:
-                upload_image(product, image)
+            if created:
+                for image in image_data:
+                    upload_image(product, image)
             
             for store, store_data in data.items():
                 upload_listing(product, store, store_data)
@@ -139,16 +140,27 @@ def upload_product(product_data):
             parent = category
     else:
         category = None
-
-    return Product.objects.get_or_create(
-        upc=product_data.upc,
+    
+    if product_data.upc:
+        return Product.objects.get_or_create(
+            upc=product_data.upc,
+            defaults={
+                'name': product_data.name,
+                'brand': brand,
+                'category': category,
+                'thumbnail': product_data.thumbnail
+            }
+        )
+    
+    product = Product(
         name=product_data.name,
-        defaults={
-            'brand': brand,
-            'category': category,
-            'thumbnail': product_data.thumbnail
-        }
+        brand=brand,
+        category=category,
+        thumbnail=product_data.thumbnail
     )
+    product.save()
+
+    return (product, True)
 
 def upload_image(product, image):
     image = Image(product=product, url=image.get('url'), primary=image.get('primary'))
