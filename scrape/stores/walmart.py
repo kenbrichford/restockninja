@@ -64,7 +64,10 @@ class Walmart:
         return images[:5]
     
     def parse_listing_data(self, item):
-        return Listing(str(item.get('itemId')), item.get('productUrl'))
+        sku = str(item.get('itemId'))
+        url = 'https://www.walmart.com/ip/%s' % sku
+
+        return Listing(sku, url)
 
     def parse_price_data(self, item):
         if item.get('availableOnline') and not item.get('marketplace'):

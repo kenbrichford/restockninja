@@ -69,7 +69,10 @@ class BestBuy:
         return images[:5]
     
     def parse_listing_data(self, item):
-        return Listing(str(item.get('sku')), item.get('url'))
+        sku = str(item.get('sku'))
+        url = 'https://www.bestbuy.com/site/%s.p' % sku
+        
+        return Listing(sku, url)
 
     def parse_price_data(self, item):
         if item.get('onlineAvailability'):
