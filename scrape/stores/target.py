@@ -93,9 +93,10 @@ class Target:
     def parse_listing_data(self, item):
         if item.get('product'):
             sku = item.get('product').get('item').get('tcin')
+            url = item.get('product').get('item').get('buy_url')
         else:
             sku = item.get('tcin')
-        url = 'https://www.target.com%s' % item.get('url')
+            url = 'https://www.target.com%s' % item.get('url')
 
         return Listing(sku, url)
 
