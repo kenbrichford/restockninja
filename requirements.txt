@@ -1,6 +1,6 @@
 celery==4.4.2
 cloudinary==1.20.0
-Django==2.2.13
+Django==2.2.20
 django-celery-beat==2.0.0
 django-cloudinary-storage==0.2.3
 django-heroku==0.3.1
